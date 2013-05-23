@@ -1,0 +1,29 @@
+{
+  "name": "min-stream",
+  "version": "0.0.0",
+  "author": "Tim Caswell <tim@creationix.com>",
+  "description": "A meta-package for min-stream helper modules.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/test.js"
+  },
+  "testling": {
+    "files": "test.js",
+    "browsers": [
+      "ie/9..latest",
+      "firefox/19..latest",
+      "chrome/25..latest",
+      "safari/latest",
+      "iphone/6",
+      "ipad/6"
+    ]
+  },
+  "devDependencies": {
+    "tape": "~1.0.2"
+  },
+  "repository": {
+    "type" : "git",
+    "url": "https://github.com/creationix/min-stream.git"
+  },
+  "license": "MIT"
+}
