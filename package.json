@@ -5,7 +5,7 @@
   "description": "A meta-package for min-stream helper modules.",
   "main": "index.js",
   "scripts": {
-    "test": "node test/index.js"
+    "test": "node test.js"
   },
   "testling": {
     "files": "test.js",
