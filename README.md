@@ -1,6 +1,11 @@
 min-stream
 ==========
 
+[![node support](https://travis-ci.org/creationix/min-stream.png)](https://travis-ci.org/creationix/min-stream)
+
+[![browser support](https://ci.testling.com/creationix/min-stream.png)](https://ci.testling.com/creationix/min-stream)
+
+
 A meta-package for min-stream helper modules.  This contains several useful and related modules for working with min-streams.  Note that implementations of min-stream should not need to depend on this library.
 
 ## The Interface
