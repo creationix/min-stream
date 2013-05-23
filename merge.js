@@ -52,3 +52,5 @@ function merge() {
   read.is = "min-stream-read";
   return read;
 }
+
+function call(fn) { fn(); }

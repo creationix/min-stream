@@ -58,3 +58,7 @@ function cat() {
   }
   return read;
 }
+
+function empty(close, callback) {
+  callback(close === true ? null : close);
+}
