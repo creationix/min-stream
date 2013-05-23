@@ -54,3 +54,12 @@ function mux(streams) {
   read.is = "min-stream-read";
   return read;
 }
+
+function arrayKeys(array) {
+  var length = array.length;
+  var keys = new Array(length);
+  for (var i = 0; i < length; i++) {
+    keys[i] = i;
+  }
+  return keys;
+}

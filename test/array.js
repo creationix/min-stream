@@ -1,8 +1,6 @@
 var array = require('../array.js');
 var test = require('tape');
 
-console.log(array);
-
 test("array should create a proper source stream", function (assert) {
   var source = array([1,2,3]);
   source(null, function (err, item) {
