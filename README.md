@@ -85,7 +85,7 @@ function myapp(read) {
     // Implement app logic as pull filter...
   };
 }
-```.
+```
 
 #### chain.source(source) -> source
 
