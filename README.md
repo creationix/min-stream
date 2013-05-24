@@ -20,10 +20,10 @@ A source is a place where data comes from.  Since this is a pull-stream system, 
 function read(close, callback) {
   // If close is truthy, that means to clean up any resources and close the stream
   // call callback with an END event when done.
-  // Otherwise some data and when ready callback(err, item)
-  // DATA is encoded as (falsy, item)
-  // END is encoded as (anything, undefined) or (anything) or ()
-  // ERROR is a special end (err, undefined) or (err)
+  // Otherwise, get some data and when ready, callback(err, item)
+  // DATA  is encoded as (falsy, item)
+  // END   is encoded as (falsy, undefined) or (falsy) or ()
+  // ERROR is encoded as (err, undefined)   or (err)
 }
 ```
 
@@ -54,13 +54,118 @@ A sink represents something like the writable end of a TCP socket or a writable 
 sink(source);
 ```
 
+Or in the likely case you have a filter
+
+```js
+sink(
+  filter(
+    source
+  )
+);
+```
+
 ## This Library
 
 Now that you know what min-streams are, you'll find that working with them directly is sometimes challenging.  Their goal was to be minimal and easy to implement.  This library makes them easy to use and very powerful as well!
 
-### pipe
+### Chain
 
-TODO: document the pipe module.
+Manually connecting sink to filter to source ends up being a reverse pyramid.  Often it's preferred to write it as a chain from source to sink in the same direction the data flows.
+
+The `chain` module helps with this.  Here is a simple example.
+
+```js
+chain
+  .source(socket.source)
+  .pull(myapp)
+  .sink(socket.sink);
+
+function myapp(read) {
+  return function (close, callback) {
+    // Implement app logic as pull filter...
+  };
+}
+```.
+
+#### chain.source(source) -> source
+
+Wrap a source function adding in the `pull`, `push`, `map`, and `sink` methods.
+
+Returns the function for easy chaining.
+
+#### chain.pull(pull) -> pull
+
+Wrap a pull filter by adding in the `pull`, `push`, `map`, and `sink` methods.
+
+Returns the function for easy chaining.
+
+#### chain.push(push) -> pull
+
+Wrap a push filter, converting it to a pull filter.  Push filters accept an emit function and return a new emit function.  There is no way to control back-pressure from within a push filter.  Also close events skip push filters.
+
+```js
+function (emit) {
+  // Set up per-stream state
+  return function (err, item) {
+    // handle this event and call `emit` 0 or more times as required by protocol.
+  };
+}
+```
+
+#### chain.map(map) -> pull
+
+Wrap a map function, converting it to a pull filter.  Map functions can't see backpressure, close events, or even end or error events.  They only see items.  Map functions are stateless.  If they throw an exception it will be caught and sent as an error event.
+
+```js
+function (item) {
+  // return transformed item.
+}
+```
+
+Existing examples of map functions are `JSON.stringify` and `JSON.parse`.
+
+
+#### source.pull(pull) -> source, source.push(push) -> source, source.map(map) -> source
+
+When chaining off a wrapped source, you can add pull, push, or map filters and a new wrapped source will be returned every time.
+
+```js
+var parsedSource = chain
+  .source(socket.source)
+  .push(deframer)
+  .map(JSON.parse);
+```
+
+#### source.sink(sink)
+
+Attaching a sink to a source completes the chain and starts the action.  Doesn't return anything and can't be chained from.
+
+```js
+chain
+  .source(file.source)
+  .map(capitalize)
+  .sink(file.sink);
+```
+
+#### pull.pull(pull) -> pull, pull.push(push) -> pull, pull.map(map) -> pull
+
+When chaining off a wrapped pull filter, you can add pull, push, or map filters and a new composite and wrapped pull filter will be returned.
+
+```js
+var combined = chain
+  .push(pushFilter)
+  .map(myMap);
+```
+
+#### pull.sink(sink) -> sink
+
+A composite sink can be built by chaining a sink call from a wrapped pull filter.
+
+```js
+var newsink = chain
+  .map(JSON.stringify)
+  .sink(socket.sink);
+```
 
 ### cat
 
