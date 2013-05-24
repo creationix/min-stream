@@ -41,6 +41,16 @@ test("consume all should handle a hash of streams", function (assert) {
   });
 });
 
+test("consume should also work in sink mode", function (assert) {
+  consume.sink(ondone)(counter(10));
+
+  function ondone(err, result) {
+    if (err) throw err;
+    assert.deepEqual(result, [0,1,2,3,4,5,6,7,8,9]);
+    assert.end();
+  }
+});
+
 
 // A source generator, counts from 0 to n - 1
 function counter(n) {

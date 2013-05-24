@@ -9,9 +9,7 @@ test("chain should link steps and wrap map function", function (assert) {
   chain
     .source(counter(6))
     .map(JSON.stringify)
-    .sink(function (read) {
-      consume(read, ondone)
-    });
+    .sink(consume.sink(ondone));
 
   function ondone(err, items) {
     if (err) throw err;
@@ -24,9 +22,7 @@ test("chain should link steps and wrap push filter", function (assert) {
   chain
     .source(counter(6))
     .push(oddity)
-    .sink(function (read) {
-      consume(read, ondone)
-    });
+    .sink(consume.sink(ondone));
 
   function ondone(err, items) {
     if (err) throw err;
@@ -38,9 +34,8 @@ test("chain should link steps and wrap push filter", function (assert) {
 test("chain should turn map into composite sink", function (assert) {
   var sink = chain
     .map(JSON.stringify)
-    .sink(function (read) {
-      consume(read, ondone)
-    });
+    .sink(consume.sink(ondone));
+
   sink(counter(6));
 
   function ondone(err, items) {
@@ -53,9 +48,8 @@ test("chain should turn map into composite sink", function (assert) {
 test("chain should turn push into composite sink", function (assert) {
   var sink = chain
     .push(oddity)
-    .sink(function (read) {
-      consume(read, ondone)
-    });
+    .sink(consume.sink(ondone));
+
   sink(counter(6));
 
   function ondone(err, items) {

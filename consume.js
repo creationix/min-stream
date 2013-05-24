@@ -45,6 +45,13 @@ function consumeAll(sources, callback) {
   });
 }
 
+consume.sink = consumeSink;
+function consumeSink(callback) {
+  return function (read) {
+    consume(read, callback);
+  };
+}
+
 function arrayKeys(array) {
   var length = array.length;
   var keys = new Array(length);
