@@ -167,25 +167,69 @@ var newsink = chain
   .sink(socket.sink);
 ```
 
-### cat
+### cat(source1, source2, ..) -> source
 
-TODO: document the cat module.
+Accepts a variable number of source functions and returns a combined source.
+The input sources will be read in sequential order.
+Arrays of items may be used in place of sources for convenience.
 
-### merge
+```js
+var combined = cat(["header"], stream, ["tail"]);
+```
 
-TODO: document the merge module.
+### merge(source1, source2, ...) -> source
 
-### dup
+Accepts a variable number of source functions and returns a combined source.
+The input sources will be read in parallel.
 
-TODO: document the dup module.
+### dup(num, source) -> sources
 
-### mux
+Duplicates input `source` into `num` copies. Returns the copies as an array of sources.  This does not buffer, so all the duplicates must be read in parallel.
 
-TODO: document the mux module.
+```js
+// Split a stream to go to both file and socket
+var sources = dup(2, input);
+logfile.sink(sources[0]);
+tcpClient.sink(sources[1]);
+```
+
+### mux(streams) -> stream
+
+Multiplex several streams into one stream.  This is like merge, except it annotates the data events so that you know which source they came from.
+
+It accepts either an array of streams or a hash of streams.  In the case of an array, the items will be tagged with the numerical index of the stream.  In case of a hash object, they will be tagged with the object keys.
+
+Items will be tagged by wrapping them in an array.  For example, the item `"Hello"` from the stream `words` would be `["words", "Hello"]` in the combined stream.
+
+```js
+// tag using 0 and 1
+var combined = mux([input, output]);
+// or use words
+var combined = mux({
+  input: input,
+  output: output
+});
+```
 
 ### demux
 
-TODO: document the demux module.
+De-multiplex a stream.  This module undoes what the `mux` module did.  You have to give it either the number of array streams to expect or the hash keys as an array.  Any keys you leave out will be dropped in the stream.
+
+```js
+var sources = demux(["words", "colors"], combined);
+sources.words // -> a stream of anything with the pattern ["words", value]
+sources.colors // -> another stream of data
+```
+
+Just like dup, all the output streams must be read in parallel.  There is no internal buffering.
+
+Here is an example of array mode:
+
+```js
+var sources = demux(2, combined);
+sources[0] // items matching [0, item] as just item
+sources[1] // items matching [1, item] as just item
+```
 
 ## Related packages
 
