@@ -1,7 +1,7 @@
-var mux = require('../mux');
-var demux = require('../demux');
-var arraySource = require('../array')
-var consume = require('../consume');
+var mux = require('../mux.js');
+var demux = require('../demux.js');
+var arraySource = require('../array.js')
+var consume = require('../consume.js');
 
 var test = require('tape');
 

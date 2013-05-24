@@ -1,7 +1,7 @@
 var test = require('tape');
 
-var arraySource = require('../array')
-var consume = require('../consume');
+var arraySource = require('../array.js')
+var consume = require('../consume.js');
 
 var dup = require('../dup.js');
 var merge = require('../merge.js');

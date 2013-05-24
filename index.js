@@ -6,6 +6,6 @@ exports.mux = require('./mux.js');
 exports.demux = require('./demux.js');
 
 exports.consume = require('./consume.js');
-exports.array = require('./array');
+exports.array = require('./array.js');
 
 exports.chain = require('./chain.js');
