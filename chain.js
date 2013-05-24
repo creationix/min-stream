@@ -50,11 +50,11 @@ function addPull(pull) {
 }
 
 function addPush(push) {
-  return addPull.call(this, pushToPull(push));
+  return this.pull(pushToPull(push));
 }
 
 function addMap(map) {
-  return addPull.call(this, mapToPull(map));
+  return this.pull(mapToPull(map));
 }
 
 function addSink(sink) {
@@ -85,7 +85,7 @@ function pushToPull(push) {
     var dataQueue = [];
     var readQueue = [];
     var reading = false;
-    var write = push(function () {
+    var emit = push(function () {
       dataQueue.push(arguments);
       check();
     });
@@ -102,12 +102,14 @@ function pushToPull(push) {
 
     function onRead(err, item) {
       reading = false;
-      write(err, item);
+      emit(err, item);
       check();
     }
 
     return function (close, callback) {
-      if (close) return read(close, callback);
+      if (close) {
+        return read(close, callback);
+      }
       readQueue.push(callback);
       check();
     };
