@@ -237,7 +237,7 @@ sources[1] // items matching [1, item] as just item
 
 This helper will consume all the events in a stream and `callback(null, items)` with an array of items when done.  If there was an error, it will be in the `callback(err)`.
 
-### consume.sink(callback) -> sink
+#### consume.sink(callback) -> sink
 
 Consume is also available as a sink for use with `chain`.
 
@@ -261,13 +261,17 @@ A version of the conversion that produces a slow source that waits a random amou
 
 ## Related packages
 
-TODO: Hyperlink these projects or move to wiki.
-
 There are many packaged and modules out there that implement this interface.  Some interesting ones are:
 
- - min-stream-node - A node.js adapter that provides tcp client and server as well as file streams using min-streams.
- - min-stream-uv - A crazy experiment to implement the same interface as min-stream-node, but using node's private internal libuv bindings for maximum speed and unstability.
- - min-stream-chrome - Another implementation of the tcp and fs API, but wrapping chrome packaged apps's special APIs.
- - min-stream-http-codec - A set of filters that makes implementing HTTP server and client programs easy on top of the tcp adapters.
- - js-git - The project that started all this.  An implementation of git in JavaScript.  Uses min-streams throughout.
+ - [min-stream-node][] - A node.js adapter that provides tcp client and server as well as file streams using min-streams.
+ - [min-stream-uv][] - A crazy experiment to implement the same interface as min-stream-node, but using node's private internal libuv bindings for maximum speed and unstability.
+ - [min-stream-chrome][] - Another implementation of the tcp and fs API, but wrapping chrome packaged apps's special APIs.
+ - [min-stream-http-codec][] - A set of filters that makes implementing HTTP server and client programs easy on top of the tcp adapters.
+ - [js-git][] - The project that started all this.  An implementation of git in JavaScript.  Uses min-streams throughout.
+
+[min-stream-node]: https://github.com/creationix/min-stream-node
+[min-stream-uv]: https://github.com/creationix/min-stream-uv
+[min-stream-chrome]: https://github.com/creationix/min-stream-chrome
+[min-stream-http-codec]: https://github.com/creationix/min-stream-http-codec
+[js-git]: https://github.com/creationix/js-git
 
