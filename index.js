@@ -8,4 +8,4 @@ exports.demux = require('./demux.js');
 exports.consume = require('./consume.js');
 exports.array = require('./array');
 
-exports.pipe = require('./pipe.js');
+exports.chain = require('./chain.js');
