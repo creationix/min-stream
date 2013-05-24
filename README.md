@@ -64,9 +64,11 @@ sink(
 );
 ```
 
-## This Library
+## Modules in this Package
 
 Now that you know what min-streams are, you'll find that working with them directly is sometimes challenging.  Their goal was to be minimal and easy to implement.  This library makes them easy to use and very powerful as well!
+
+Any module can be loaded either directly as `require('min-stream/module.js')` or as a reference to index as `require('min-stream').module` where `module` is (`chain`, `cat`, `merge`, `dup`, `mux`, `demux`, `consume`, or `array`);
 
 ### Chain
 
@@ -211,7 +213,7 @@ var combined = mux({
 });
 ```
 
-### demux
+### demux(names, stream) -> streams
 
 De-multiplex a stream.  This module undoes what the `mux` module did.  You have to give it either the number of array streams to expect or the hash keys as an array.  Any keys you leave out will be dropped in the stream.
 
@@ -230,6 +232,32 @@ var sources = demux(2, combined);
 sources[0] // items matching [0, item] as just item
 sources[1] // items matching [1, item] as just item
 ```
+
+### consume(source, callback)
+
+This helper will consume all the events in a stream and `callback(null, items)` with an array of items when done.  If there was an error, it will be in the `callback(err)`.
+
+### consume.sink(callback) -> sink
+
+Consume is also available as a sink for use with `chain`.
+
+#### consume.all(sources, callback)
+
+This is like `consume`, except it accepts an array of streams of a hash of streams.  It will consume them all in parallel and `callback(null, result)` when all are done.  The `result` will have the same structure and type of the original `sources`.
+
+```js
+consume.all(demux(5, source), function (err, result) {
+  // result is an array of arrays
+});
+```
+
+### array(array) -> source
+
+A simple module that converts an array of items into a source function.
+
+#### array.async(array) -> source
+
+A version of the conversion that produces a slow source that waits a random amount of time before calling the read callback each time.  Useful in testing.
 
 ## Related packages
 
