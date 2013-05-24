@@ -45,7 +45,6 @@ function applySink(sink) {
 function addPull(pull) {
   var filter = this;
   return wrapPull(function (read) {
-    console.log({read:read,filter:filter,pull:pull})
     return pull(filter(read));
   });
 }

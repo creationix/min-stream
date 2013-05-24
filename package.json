@@ -1,6 +1,6 @@
 {
   "name": "min-stream",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Tim Caswell <tim@creationix.com>",
   "description": "A meta-package for min-stream helper modules.",
   "main": "index.js",
