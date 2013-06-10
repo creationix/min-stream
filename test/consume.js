@@ -56,7 +56,7 @@ test("consume should also work in sink mode", function (assert) {
 function counter(n) {
   var i = 0;
   return function (close, callback) {
-    if (close) callbacl(close === true ? null : close);
+    if (close) callback(close === true ? null : close);
     else if (i < n) callback(null, i++);
     else callback();
   };
